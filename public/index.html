@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0f172a"
+    >
+
+    <title>CompraKi</title>
+
+    <!-- PWA -->
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
+    <!-- CSS principal -->
+    <link
+        rel="stylesheet"
+        href="/css/app.css"
+    >
+
+    <!-- Correção dos cards -->
+    <link
+        rel="stylesheet"
+        href="/css/card-fix.css?v=221"
+    >
+</head>
+
+
+<body>
+
+    <!-- =========================================================
+         NOTIFICAÇÕES
+    ========================================================== -->
+
+    <div id="toast"></div>
+
+
+    <!-- =========================================================
+         LOGIN / CADASTRO
+    ========================================================== -->
+
+    <section
+        id="auth"
+        class="auth-page"
+    >
+
+        <div class="brand-panel">
+
+            <div class="logo">
+                C
+            </div>
+
+            <h1>CompraKi</h1>
+
+            <p>
+                Planeje compras, acompanhe preços e mantenha
+                seus projetos dentro do orçamento.
+            </p>
+
+        </div>
+
+
+        <div class="auth-box">
+
+            <h2>Bem-vindo</h2>
+
+            <p>
+                Entre ou crie sua conta.
+            </p>
+
+            <input
+                id="name"
+                type="text"
+                placeholder="Seu nome"
+            >
+
+            <input
+                id="email"
+                type="email"
+                placeholder="E-mail"
+            >
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Senha"
+            >
+
+            <button id="loginBtn">
+                Entrar
+            </button>
+
+            <button
+                id="registerBtn"
+                class="secondary"
+            >
+                Criar conta
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         APLICAÇÃO
+    ========================================================== -->
+
+    <div
+        id="shell"
+        hidden
+    >
+
+
+        <!-- =====================================================
+             MENU LATERAL
+        ====================================================== -->
+
+        <aside>
+
+            <div class="side-brand">
+
+                <div class="logo small">
+                    C
+                </div>
+
+                <b>CompraKi</b>
+
+            </div>
+
+
+            <nav>
+
+                <button
+                    class="nav active"
+                    data-view="home"
+                >
+                    ⌂
+                    <span>Visão geral</span>
+                </button>
+
+
+                <button
+                    class="nav"
+                    data-view="projects"
+                >
+                    ▦
+                    <span>Projetos</span>
+                </button>
+
+
+                <button
+                    class="nav"
+                    data-view="account"
+                >
+                    ◉
+                    <span>Minha conta</span>
+                </button>
+
+            </nav>
+
+
+            <div class="side-bottom">
+
+                <div class="trial">
+
+                    Plano atual
+
+                    <br>
+
+                    <b>
+                        Período de avaliação
+                    </b>
+
+                </div>
+
+
+                <button
+                    id="logoutBtn"
+                    class="nav"
+                >
+                    ↪
+                    <span>Sair</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+             ÁREA PRINCIPAL
+        ====================================================== -->
+
+        <div class="workspace">
+
+
+            <!-- =================================================
+                 CABEÇALHO
+            ================================================== -->
+
+            <header>
+
+                <div>
+
+                    <span class="eyebrow">
+                        PLANEJAMENTO DE COMPRAS
+                    </span>
+
+                    <h1 id="pageTitle">
+                        Visão geral
+                    </h1>
+
+                </div>
+
+
+                <div class="user-chip">
+
+                    <span id="avatar">
+                        U
+                    </span>
+
+                    <div>
+
+                        <b id="userName">
+                            Usuário
+                        </b>
+
+                        <small>
+                            Minha conta
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <main>
+
+
+                <!-- =============================================
+                     DASHBOARD
+                ============================================== -->
+
+                <section id="homeView">
+
+
+                    <div class="welcome">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                SEU PAINEL
+                            </span>
+
+                            <h2>
+                                Transforme planos em compras organizadas.
+                            </h2>
+
+                            <p>
+                                Acompanhe orçamento, produtos escolhidos
+                                e tudo o que já foi comprado.
+                            </p>
+
+                        </div>
+
+
+                        <button class="primary new-project">
+                            + Novo projeto
+                        </button>
+
+                    </div>
+
+
+                    <!-- Indicadores gerais -->
+
+                    <div
+                        id="globalStats"
+                        class="stats"
+                    ></div>
+
+
+                    <div class="section-head">
+
+                        <div>
+
+                            <h2>
+                                Projetos recentes
+                            </h2>
+
+                            <p>
+                                Continue de onde parou.
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            class="link"
+                            data-go="projects"
+                        >
+                            Ver todos →
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="recentProjects"
+                        class="project-grid"
+                    ></div>
+
+                </section>
+
+
+                <!-- =============================================
+                     TODOS OS PROJETOS
+                ============================================== -->
+
+                <section
+                    id="projectsView"
+                    hidden
+                >
+
+                    <div class="section-head">
+
+                        <div>
+
+                            <h2>
+                                Todos os projetos
+                            </h2>
+
+                            <p>
+                                Casa, viagem, casamento, setup
+                                ou qualquer outro plano.
+                            </p>
+
+                        </div>
+
+
+                        <button class="primary new-project">
+                            + Novo projeto
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="allProjects"
+                        class="project-grid"
+                    ></div>
+
+                </section>
+
+
+                <!-- =============================================
+                     DETALHES DO PROJETO
+                ============================================== -->
+
+                <section
+                    id="projectView"
+                    hidden
+                >
+
+
+                    <button
+                        id="backBtn"
+                        class="back"
+                    >
+                        ← Voltar aos projetos
+                    </button>
+
+
+                    <div class="project-hero">
+
+                        <div>
+
+                            <span
+                                id="projectTemplate"
+                                class="pill"
+                            ></span>
+
+                            <h2 id="projectName"></h2>
+
+                            <p>
+                                Organize os itens, cole links de produtos
+                                e acompanhe o orçamento em tempo real.
+                            </p>
+
+                        </div>
+
+
+                        <div class="project-actions">
+
+                            <button
+                                id="deleteProjectBtn"
+                                class="danger-outline"
+                            >
+                                Excluir projeto
+                            </button>
+
+
+                            <button
+                                id="newItemBtn"
+                                class="primary"
+                            >
+                                + Adicionar produto
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Indicadores do projeto -->
+
+                    <div
+                        id="projectStats"
+                        class="stats"
+                    ></div>
+
+
+                    <!-- Pesquisa / filtros -->
+
+                    <div class="toolbar">
+
+                        <div class="search">
+
+                            ⌕
+
+                            <input
+                                id="itemSearch"
+                                placeholder="Buscar produto ou loja..."
+                            >
+
+                        </div>
+
+
+                        <select id="statusFilter">
+
+                            <option value="">
+                                Todos os status
+                            </option>
+
+                            <option value="A_ESCOLHER">
+                                A escolher
+                            </option>
+
+                            <option value="ESCOLHIDO">
+                                Escolhido
+                            </option>
+
+                            <option value="COMPRADO">
+                                Comprado
+                            </option>
+
+                            <option value="CANCELADO">
+                                Cancelado
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Produtos -->
+
+                    <div
+                        id="itemsGrid"
+                        class="items-grid"
+                    ></div>
+
+                </section>
+
+
+                <!-- =============================================
+                     CONTA / ASSINATURA
+                ============================================== -->
+
+                <section
+                    id="accountView"
+                    hidden
+                >
+
+                    <div class="account-card">
+
+                        <span class="eyebrow">
+                            ASSINATURA
+                        </span>
+
+                        <h2>
+                            CompraKi
+                        </h2>
+
+                        <p>
+                            A estrutura de assinatura já está preparada.
+                            O gateway de cobrança será conectado na etapa
+                            de publicação comercial.
+                        </p>
+
+
+                        <div class="plan-line">
+
+                            <b>
+                                Período de avaliação
+                            </b>
+
+                            <span>
+                                Ativo
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </main>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         MODAL — NOVO PROJETO
+    ========================================================== -->
+
+    <dialog id="projectDlg">
+
+        <form id="projectForm">
+
+
+            <div class="dialog-head">
+
+                <div>
+
+                    <span class="eyebrow">
+                        NOVO PLANO
+                    </span>
+
+                    <h2>
+                        Criar projeto
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="x close-project"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <label for="pname">
+                Nome do projeto
+            </label>
+
+            <input
+                id="pname"
+                required
+                placeholder="Ex.: Apartamento novo"
+            >
+
+
+            <label for="ptemplate">
+                Tipo
+            </label>
+
+            <select id="ptemplate">
+
+                <option>Personalizado</option>
+                <option>Casa nova</option>
+                <option>Enxoval</option>
+                <option>Casamento</option>
+                <option>Viagem</option>
+                <option>Setup</option>
+                <option>Reforma</option>
+                <option>Escritório</option>
+
+            </select>
+
+
+            <label for="pbudget">
+                Orçamento
+            </label>
+
+
+            <div class="money-input">
+
+                <span>
+                    R$
+                </span>
+
+                <input
+                    id="pbudget"
+                    type="number"
+                    min="0"
+                    step=".01"
+                    placeholder="0,00"
+                >
+
+            </div>
+
+
+            <button class="primary full">
+                Criar projeto
+            </button>
+
+        </form>
+
+    </dialog>
+
+
+    <!-- =========================================================
+         MODAL — PRODUTO
+    ========================================================== -->
+
+    <dialog id="itemDlg">
+
+        <form id="itemForm">
+
+
+            <div class="dialog-head">
+
+                <div>
+
+                    <span class="eyebrow">
+                        NOVO ITEM
+                    </span>
+
+                    <h2>
+                        Adicionar produto
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="x close-item"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- Importação -->
+
+            <label for="url">
+                Link do produto
+            </label>
+
+
+            <div class="import-row">
+
+                <input
+                    id="url"
+                    type="url"
+                    placeholder="Cole o link da loja"
+                >
+
+                <button
+                    id="importBtn"
+                    type="button"
+                >
+                    Buscar dados
+                </button>
+
+            </div>
+
+
+            <div id="importStatus"></div>
+
+            <div id="preview"></div>
+
+
+            <!-- Produto -->
+
+            <label for="iname">
+                Produto
+            </label>
+
+            <input
+                id="iname"
+                required
+                placeholder="Nome do produto"
+            >
+
+
+            <label for="idesc">
+                Descrição
+            </label>
+
+            <textarea
+                id="idesc"
+                placeholder="Detalhes importantes"
+            ></textarea>
+
+
+            <!-- Quantidade / preço planejado -->
+
+            <div class="two">
+
+                <div>
+
+                    <label for="iqty">
+                        Quantidade
+                    </label>
+
+                    <input
+                        id="iqty"
+                        type="number"
+                        min="1"
+                        value="1"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="iplanned">
+                        Preço planejado
+                    </label>
+
+                    <input
+                        id="iplanned"
+                        type="number"
+                        min="0"
+                        step=".01"
+                        placeholder="0,00"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Preço / loja -->
+
+            <div class="two">
+
+                <div>
+
+                    <label for="ifound">
+                        Preço encontrado
+                    </label>
+
+                    <input
+                        id="ifound"
+                        type="number"
+                        min="0"
+                        step=".01"
+                        placeholder="0,00"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="istore">
+                        Loja
+                    </label>
+
+                    <input
+                        id="istore"
+                        placeholder="Loja"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Status -->
+
+            <label for="istatus">
+                Status
+            </label>
+
+
+            <select id="istatus">
+
+                <option value="A_ESCOLHER">
+                    A escolher
+                </option>
+
+                <option value="ESCOLHIDO">
+                    Escolhido
+                </option>
+
+                <option value="COMPRADO">
+                    Comprado
+                </option>
+
+                <option value="CANCELADO">
+                    Cancelado
+                </option>
+
+            </select>
+
+
+            <!-- Dados de compra -->
+
+            <div
+                id="purchaseFields"
+                hidden
+            >
+
+                <div class="two">
+
+                    <div>
+
+                        <label for="ipaid">
+                            Preço pago
+                        </label>
+
+                        <input
+                            id="ipaid"
+                            type="number"
+                            min="0"
+                            step=".01"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="idate">
+                            Data da compra
+                        </label>
+
+                        <input
+                            id="idate"
+                            type="date"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <label for="ipay">
+                    Forma de pagamento
+                </label>
+
+
+                <select id="ipay">
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option>
+                        Pix
+                    </option>
+
+                    <option>
+                        Crédito
+                    </option>
+
+                    <option>
+                        Débito
+                    </option>
+
+                    <option>
+                        Boleto
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button class="primary full">
+                Salvar produto
+            </button>
+
+        </form>
+
+    </dialog>
+
+
+    <!-- =========================================================
+         MODAL — EXCLUIR PROJETO
+    ========================================================== -->
+
+    <dialog
+        id="confirmDlg"
+        class="confirm-dialog"
+    >
+
+        <div class="confirm-box">
+
+
+            <div class="danger-icon">
+                !
+            </div>
+
+
+            <h2>
+                Excluir projeto?
+            </h2>
+
+
+            <p id="confirmText">
+                Esta ação é permanente.
+            </p>
+
+
+            <div class="confirm-actions">
+
+                <button
+                    id="cancelDeleteBtn"
+                    class="secondary-btn"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    id="confirmDeleteBtn"
+                    class="danger-btn"
+                >
+                    Excluir definitivamente
+                </button>
+
+            </div>
+
+        </div>
+
+    </dialog>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================== -->
+
+    <script src="/js/app.js"></script>
+
+</body>
+
+</html>

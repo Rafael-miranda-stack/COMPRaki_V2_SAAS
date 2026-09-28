@@ -1,0 +1,1 @@
+const jwt=require("jsonwebtoken");module.exports=(req,res,next)=>{const h=req.headers.authorization||"",t=h.startsWith("Bearer ")?h.slice(7):null;if(!t)return res.status(401).json({error:"Não autenticado."});try{req.user=jwt.verify(t,process.env.JWT_SECRET);next()}catch(e){res.status(401).json({error:"Sessão inválida."})}};
