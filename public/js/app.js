@@ -26,7 +26,23 @@ function togglePurchase(){$("purchaseFields").hidden=$("istatus").value!=="COMPR
 async function saveItem(e){e.preventDefault();try{let st=$("istatus").value,d={project_id:currentProject.id,name:$("iname").value,description:$("idesc").value,quantity:$("iqty").value,planned_price:$("iplanned").value,found_price:$("ifound").value,paid_price:$("ipaid").value,status:st,store:$("istore").value,product_url:$("url").value,image_url:imported.image||"",purchased_at:$("idate").value||null,payment_status:st==="COMPRADO"?"PENDENTE":"NAO_SE_APLICA",payment_method:$("ipay").value};await api("/api/items",{method:"POST",body:JSON.stringify(d)});$("itemDlg").close();toast("Produto adicionado.");await loadItems();await loadProjects();currentProject=projects.find(p=>Number(p.id)===Number(d.project_id))||currentProject}catch(e){toast(e.message)}}
 function askDeleteProject(){if(!currentProject)return;$("confirmText").textContent=`O projeto "${currentProject.name}" e todos os produtos dele serão excluídos. Esta ação não pode ser desfeita.`;$("confirmDlg").showModal()}
 async function deleteProject(){if(!currentProject)return;let id=currentProject.id;$("confirmDeleteBtn").disabled=true;$("confirmDeleteBtn").textContent="Excluindo...";try{await api("/api/projects/"+id,{method:"DELETE"});$("confirmDlg").close();currentProject=null;await loadProjects();showView("projects");toast("Projeto excluído.")}catch(e){toast(e.message)}finally{$("confirmDeleteBtn").disabled=false;$("confirmDeleteBtn").textContent="Excluir definitivamente"}}
-document.addEventListener("DOMContentLoaded",()=>{$("loginBtn").onclick=login;$("registerBtn").onclick=register;$("logoutBtn").onclick=logout;document.querySelectorAll(".new-project").forEach(b=>b.onclick=newProject);document.querySelector(".close-project").onclick=()=>$("projectDlg").close();document.querySelector(".close-item").onclick=()=>$("itemDlg").close();$("projectForm").onsubmit=createProject;$("itemForm").onsubmit=saveItem;$("newItemBtn").onclick=newItem;$("deleteProjectBtn").onclick=askDeleteProject;$("cancelDeleteBtn").onclick=()=>$("confirmDlg").close();$("confirmDeleteBtn").onclick=deleteProject;$("importBtn").onclick=importUrl;$("istatus").onchange=togglePurchase;$("backBtn").onclick=()=>showView("projects");$("itemSearch").oninput=renderItems;$("statusFilter").onchange=renderItems;document.querySelectorAll(".nav[data-view]").forEach(n=>n.onclick=()=>showView(n.dataset.view));document.querySelectorAll("[data-go]").forEach(n=>n.onclick=()=>showView(n.dataset.go));boot()});
+function setAuthMode(mode){
+  const registering=mode==="register";
+  $("nameField").hidden=!registering;
+  $("loginBtn").hidden=registering;
+  $("registerSubmitBtn").hidden=!registering;
+  $("registerBtn").hidden=registering;
+  $("backToLoginBtn").hidden=!registering;
+  $("forgotPasswordBtn").parentElement.hidden=registering;
+  $("authSwitchText").textContent=registering?"Já possui uma conta?":"Ainda não tem uma conta?";
+  $("authEyebrow").textContent=registering?"CRIAR CONTA":"ACESSO À CONTA";
+  $("authTitle").textContent=registering?"Crie sua conta":"Bem-vindo de volta!";
+  $("authSubtitle").textContent=registering?"Comece a organizar seus projetos e compras.":"Entre para continuar organizando seus projetos.";
+  $("password").autocomplete=registering?"new-password":"current-password";
+  if(registering) $("name").focus(); else $("email").focus();
+}
+
+document.addEventListener("DOMContentLoaded",()=>{$("loginBtn").onclick=login;$("registerBtn").onclick=()=>setAuthMode("register");$("registerSubmitBtn").onclick=register;$("backToLoginBtn").onclick=()=>setAuthMode("login");$("togglePassword").onclick=()=>{const p=$("password"),show=p.type==="password";p.type=show?"text":"password";$("togglePassword").setAttribute("aria-label",show?"Ocultar senha":"Mostrar senha");$("togglePassword").title=show?"Ocultar senha":"Mostrar senha"};$("logoutBtn").onclick=logout;document.querySelectorAll(".new-project").forEach(b=>b.onclick=newProject);document.querySelector(".close-project").onclick=()=>$("projectDlg").close();document.querySelector(".close-item").onclick=()=>$("itemDlg").close();$("projectForm").onsubmit=createProject;$("itemForm").onsubmit=saveItem;$("newItemBtn").onclick=newItem;$("deleteProjectBtn").onclick=askDeleteProject;$("cancelDeleteBtn").onclick=()=>$("confirmDlg").close();$("confirmDeleteBtn").onclick=deleteProject;$("importBtn").onclick=importUrl;$("istatus").onchange=togglePurchase;$("backBtn").onclick=()=>showView("projects");$("itemSearch").oninput=renderItems;$("statusFilter").onchange=renderItems;document.querySelectorAll(".nav[data-view]").forEach(n=>n.onclick=()=>showView(n.dataset.view));document.querySelectorAll("[data-go]").forEach(n=>n.onclick=()=>showView(n.dataset.go));boot()});
 // Segurança da conta: recuperação e alteração de senha
 async function requestPasswordReset(e){
   e.preventDefault();
