@@ -42,7 +42,51 @@ function setAuthMode(mode){
   if(registering) $("name").focus(); else $("email").focus();
 }
 
-document.addEventListener("DOMContentLoaded",()=>{$("loginBtn").onclick=login;$("registerBtn").onclick=()=>setAuthMode("register");$("registerSubmitBtn").onclick=register;$("backToLoginBtn").onclick=()=>setAuthMode("login");$("togglePassword").onclick=()=>{const p=$("password"),show=p.type==="password";p.type=show?"text":"password";$("togglePassword").setAttribute("aria-label",show?"Ocultar senha":"Mostrar senha");$("togglePassword").title=show?"Ocultar senha":"Mostrar senha"};$("logoutBtn").onclick=logout;document.querySelectorAll(".new-project").forEach(b=>b.onclick=newProject);document.querySelector(".close-project").onclick=()=>$("projectDlg").close();document.querySelector(".close-item").onclick=()=>$("itemDlg").close();$("projectForm").onsubmit=createProject;$("itemForm").onsubmit=saveItem;$("newItemBtn").onclick=newItem;$("deleteProjectBtn").onclick=askDeleteProject;$("cancelDeleteBtn").onclick=()=>$("confirmDlg").close();$("confirmDeleteBtn").onclick=deleteProject;$("importBtn").onclick=importUrl;$("istatus").onchange=togglePurchase;$("backBtn").onclick=()=>showView("projects");$("itemSearch").oninput=renderItems;$("statusFilter").onchange=renderItems;document.querySelectorAll(".nav[data-view]").forEach(n=>n.onclick=()=>showView(n.dataset.view));document.querySelectorAll("[data-go]").forEach(n=>n.onclick=()=>showView(n.dataset.go));boot()});
+
+async function openMembers(){
+  if(!currentProject)return toast("Abra um projeto primeiro.");
+  try{
+    await loadMembers();
+    $("membersDlg").showModal();
+  }catch(e){toast(e.message)}
+}
+async function loadMembers(){
+  const list=await api("/api/projects/"+currentProject.id+"/members");
+  $("memberInvite").hidden=!list.can_manage;
+  $("memberList").innerHTML=list.members.map(m=>`<div class="member-row">
+    <div><b>${esc(m.name||m.email)}</b><small>${esc(m.email)}${m.is_owner?" • Proprietário":""}</small></div>
+    ${m.is_owner?`<span class="pill">OWNER</span>`:`<select class="member-role" data-user-id="${m.user_id}" ${list.can_manage?"":"disabled"}><option value="VIEWER" ${m.role==="VIEWER"?"selected":""}>Visualizador</option><option value="EDITOR" ${m.role==="EDITOR"?"selected":""}>Editor</option></select>`}
+    ${(!m.is_owner&&list.can_manage)?`<button type="button" class="danger member-remove" data-user-id="${m.user_id}">Remover</button>`:""}
+  </div>`).join("")||"<div class='empty'><b>Nenhum participante.</b></div>";
+  document.querySelectorAll(".member-role").forEach(el=>el.onchange=()=>updateMember(el.dataset.userId,el.value));
+  document.querySelectorAll(".member-remove").forEach(el=>el.onclick=()=>removeMember(el.dataset.userId));
+}
+async function addMember(){
+  const email=$("memberEmail").value.trim();
+  if(!email)return toast("Informe o e-mail do colaborador.");
+  try{
+    await api("/api/projects/"+currentProject.id+"/members",{method:"POST",body:JSON.stringify({email,role:$("memberRole").value})});
+    $("memberEmail").value="";
+    toast("Acesso atualizado.");
+    await loadMembers();
+  }catch(e){toast(e.message)}
+}
+async function updateMember(userId,role){
+  try{
+    await api("/api/projects/"+currentProject.id+"/members/"+userId,{method:"PATCH",body:JSON.stringify({role})});
+    toast("Permissão atualizada.");
+    await loadMembers();
+  }catch(e){toast(e.message)}
+}
+async function removeMember(userId){
+  try{
+    await api("/api/projects/"+currentProject.id+"/members/"+userId,{method:"DELETE"});
+    toast("Participante removido.");
+    await loadMembers();
+  }catch(e){toast(e.message)}
+}
+
+document.addEventListener("DOMContentLoaded",()=>{$("loginBtn").onclick=login;$("registerBtn").onclick=()=>setAuthMode("register");$("registerSubmitBtn").onclick=register;$("backToLoginBtn").onclick=()=>setAuthMode("login");$("togglePassword").onclick=()=>{const p=$("password"),show=p.type==="password";p.type=show?"text":"password";$("togglePassword").setAttribute("aria-label",show?"Ocultar senha":"Mostrar senha");$("togglePassword").title=show?"Ocultar senha":"Mostrar senha"};$("logoutBtn").onclick=logout;document.querySelectorAll(".new-project").forEach(b=>b.onclick=newProject);document.querySelector(".close-project").onclick=()=>$("projectDlg").close();document.querySelector(".close-item").onclick=()=>$("itemDlg").close();$("projectForm").onsubmit=createProject;$("itemForm").onsubmit=saveItem;$("newItemBtn").onclick=newItem;$("deleteProjectBtn").onclick=askDeleteProject;$("membersBtn").onclick=openMembers;document.querySelector(".close-members").onclick=()=>$("membersDlg").close();$("addMemberBtn").onclick=addMember;$("cancelDeleteBtn").onclick=()=>$("confirmDlg").close();$("confirmDeleteBtn").onclick=deleteProject;$("importBtn").onclick=importUrl;$("istatus").onchange=togglePurchase;$("backBtn").onclick=()=>showView("projects");$("itemSearch").oninput=renderItems;$("statusFilter").onchange=renderItems;document.querySelectorAll(".nav[data-view]").forEach(n=>n.onclick=()=>showView(n.dataset.view));document.querySelectorAll("[data-go]").forEach(n=>n.onclick=()=>showView(n.dataset.go));boot()});
 // Segurança da conta: recuperação e alteração de senha
 async function requestPasswordReset(e){
   e.preventDefault();
