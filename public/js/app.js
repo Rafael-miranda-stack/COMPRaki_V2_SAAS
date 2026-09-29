@@ -27,3 +27,51 @@ async function saveItem(e){e.preventDefault();try{let st=$("istatus").value,d={p
 function askDeleteProject(){if(!currentProject)return;$("confirmText").textContent=`O projeto "${currentProject.name}" e todos os produtos dele serão excluídos. Esta ação não pode ser desfeita.`;$("confirmDlg").showModal()}
 async function deleteProject(){if(!currentProject)return;let id=currentProject.id;$("confirmDeleteBtn").disabled=true;$("confirmDeleteBtn").textContent="Excluindo...";try{await api("/api/projects/"+id,{method:"DELETE"});$("confirmDlg").close();currentProject=null;await loadProjects();showView("projects");toast("Projeto excluído.")}catch(e){toast(e.message)}finally{$("confirmDeleteBtn").disabled=false;$("confirmDeleteBtn").textContent="Excluir definitivamente"}}
 document.addEventListener("DOMContentLoaded",()=>{$("loginBtn").onclick=login;$("registerBtn").onclick=register;$("logoutBtn").onclick=logout;document.querySelectorAll(".new-project").forEach(b=>b.onclick=newProject);document.querySelector(".close-project").onclick=()=>$("projectDlg").close();document.querySelector(".close-item").onclick=()=>$("itemDlg").close();$("projectForm").onsubmit=createProject;$("itemForm").onsubmit=saveItem;$("newItemBtn").onclick=newItem;$("deleteProjectBtn").onclick=askDeleteProject;$("cancelDeleteBtn").onclick=()=>$("confirmDlg").close();$("confirmDeleteBtn").onclick=deleteProject;$("importBtn").onclick=importUrl;$("istatus").onchange=togglePurchase;$("backBtn").onclick=()=>showView("projects");$("itemSearch").oninput=renderItems;$("statusFilter").onchange=renderItems;document.querySelectorAll(".nav[data-view]").forEach(n=>n.onclick=()=>showView(n.dataset.view));document.querySelectorAll("[data-go]").forEach(n=>n.onclick=()=>showView(n.dataset.go));boot()});
+// Segurança da conta: recuperação e alteração de senha
+async function requestPasswordReset(e){
+  e.preventDefault();
+  const btn=$("sendResetBtn");
+  btn.disabled=true;btn.textContent="Enviando...";
+  try{
+    const d=await api("/api/auth/forgot-password",{method:"POST",body:JSON.stringify({email:$("forgotEmail").value})});
+    $("forgotPasswordDlg").close();
+    toast(d.message||"Se o e-mail estiver cadastrado, enviaremos o link de recuperação.");
+  }catch(err){toast(err.message)}finally{btn.disabled=false;btn.textContent="Enviar link de recuperação"}
+}
+async function resetPasswordFromLink(e){
+  e.preventDefault();
+  const p=$("resetPassword").value,c=$("resetPasswordConfirm").value;
+  if(p.length<8)return toast("A nova senha deve ter pelo menos 8 caracteres.");
+  if(p!==c)return toast("As senhas não coincidem.");
+  const resetToken=new URLSearchParams(location.search).get("reset_token");
+  const btn=$("resetPasswordBtn");btn.disabled=true;btn.textContent="Salvando...";
+  try{
+    const d=await api("/api/auth/reset-password",{method:"POST",body:JSON.stringify({token:resetToken,password:p})});
+    localStorage.removeItem("compraki_token");localStorage.removeItem("token");token="";
+    history.replaceState({},"",location.pathname);
+    $("resetPasswordDlg").close();
+    $("auth").hidden=false;$("shell").hidden=true;
+    $("password").value="";
+    toast(d.message||"Senha redefinida com sucesso.");
+  }catch(err){toast(err.message)}finally{btn.disabled=false;btn.textContent="Salvar nova senha"}
+}
+async function changePassword(e){
+  e.preventDefault();
+  const current=$("currentPassword").value,n=$("newPassword").value,c=$("confirmNewPassword").value;
+  if(n.length<8)return toast("A nova senha deve ter pelo menos 8 caracteres.");
+  if(n!==c)return toast("A confirmação da nova senha não confere.");
+  const btn=$("changePasswordBtn");btn.disabled=true;btn.textContent="Alterando...";
+  try{
+    const d=await api("/api/auth/change-password",{method:"POST",body:JSON.stringify({currentPassword:current,newPassword:n})});
+    $("changePasswordForm").reset();toast(d.message||"Senha alterada com sucesso.");
+  }catch(err){toast(err.message)}finally{btn.disabled=false;btn.textContent="Alterar senha"}
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  $("forgotPasswordBtn").onclick=()=>{$("forgotEmail").value=$("email").value||"";$("forgotPasswordDlg").showModal()};
+  document.querySelector(".close-forgot").onclick=()=>$("forgotPasswordDlg").close();
+  $("forgotPasswordForm").onsubmit=requestPasswordReset;
+  $("resetPasswordForm").onsubmit=resetPasswordFromLink;
+  $("changePasswordForm").onsubmit=changePassword;
+  const resetToken=new URLSearchParams(location.search).get("reset_token");
+  if(resetToken){$("auth").hidden=false;$("shell").hidden=true;$("resetPasswordDlg").showModal()}
+});

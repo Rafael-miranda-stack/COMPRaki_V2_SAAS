@@ -41,6 +41,7 @@
       </div>
       <div class="auth-field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
       <div class="auth-field"><label for="password">Senha</label><div class="password-wrap"><input id="password" type="password" autocomplete="current-password" placeholder="Digite sua senha"><button id="togglePassword" class="password-toggle" type="button" aria-label="Mostrar senha" title="Mostrar senha">◉</button></div></div>
+      <div class="forgot-row"><button id="forgotPasswordBtn" type="button">Esqueceu a senha?</button></div>
       <button id="loginBtn" class="auth-primary">Entrar</button>
       <button id="registerSubmitBtn" class="auth-primary" hidden>Criar minha conta</button>
       <div class="auth-switch"><span id="authSwitchText">Ainda não tem uma conta?</span><button id="registerBtn" type="button">Criar conta</button><button id="backToLoginBtn" type="button" hidden>Voltar para entrar</button></div>
@@ -119,7 +120,18 @@
 </section>
 
 <section id="accountView" hidden>
-  <div class="account-card"><h2>Minha conta</h2><p class="muted">Sua conta identifica suas permissões nos projetos.</p><div class="plan-line"><b>CompraKi</b><span>PWA habilitada</span></div></div>
+  <div class="account-grid">
+    <div class="account-card"><h2>Minha conta</h2><p class="muted">Sua conta identifica suas permissões nos projetos.</p><div class="plan-line"><b>CompraKi</b><span>PWA habilitada</span></div></div>
+    <div class="account-card password-card">
+      <span class="eyebrow">SEGURANÇA</span><h2>Alterar senha</h2><p class="muted">Use sua senha atual para confirmar a alteração.</p>
+      <form id="changePasswordForm" class="password-form">
+        <label>Senha atual</label><input id="currentPassword" type="password" autocomplete="current-password" required>
+        <label>Nova senha</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+        <label>Confirmar nova senha</label><input id="confirmNewPassword" type="password" autocomplete="new-password" minlength="8" required>
+        <button id="changePasswordBtn" class="primary" type="submit">Alterar senha</button>
+      </form>
+    </div>
+  </div>
 </section>
 </main>
 </div>
@@ -150,5 +162,20 @@
 
 <dialog id="confirmDlg" class="confirm-dialog"><div class="confirm-box"><div class="danger-icon">!</div><h2>Excluir projeto?</h2><p id="confirmText"></p><div class="confirm-actions"><button id="cancelDeleteBtn" class="secondary-btn">Cancelar</button><button id="confirmDeleteBtn" class="danger-btn">Excluir definitivamente</button></div></div></dialog>
 
-<script src="/js/app.js?v=250"></script>
+<dialog id="forgotPasswordDlg" class="auth-dialog"><form id="forgotPasswordForm">
+  <div class="dialog-head"><div><span class="eyebrow">RECUPERAÇÃO DE ACESSO</span><h2>Esqueceu sua senha?</h2></div><button type="button" class="x close-forgot">×</button></div>
+  <p class="muted">Informe seu e-mail. Se ele estiver cadastrado, enviaremos um link para criar uma nova senha.</p>
+  <label>E-mail</label><input id="forgotEmail" type="email" autocomplete="email" required placeholder="voce@email.com">
+  <button id="sendResetBtn" class="primary full" type="submit">Enviar link de recuperação</button>
+</form></dialog>
+
+<dialog id="resetPasswordDlg" class="auth-dialog"><form id="resetPasswordForm">
+  <div class="dialog-head"><div><span class="eyebrow">NOVA SENHA</span><h2>Crie uma nova senha</h2></div></div>
+  <p class="muted">A nova senha deve ter pelo menos 8 caracteres.</p>
+  <label>Nova senha</label><input id="resetPassword" type="password" autocomplete="new-password" minlength="8" required>
+  <label>Confirmar nova senha</label><input id="resetPasswordConfirm" type="password" autocomplete="new-password" minlength="8" required>
+  <button id="resetPasswordBtn" class="primary full" type="submit">Salvar nova senha</button>
+</form></dialog>
+
+<script src="/js/app.js?v=260"></script>
 </body></html>

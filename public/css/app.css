@@ -573,3 +573,6 @@ body:has(.auth-page:not([hidden])) {
     background: rgba(9,18,31,.68) !important;
   }
 }
+
+/* Recuperação e alteração de senha */
+.forgot-row{display:flex;justify-content:flex-end;margin:-4px 0 14px}.forgot-row button{border:0;background:transparent;color:#ff8a70;cursor:pointer;font-weight:700;padding:4px 0}.forgot-row button:hover{text-decoration:underline}.account-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}.password-card{max-width:620px}.password-form{display:grid;gap:10px;margin-top:18px}.password-form label,.auth-dialog label{font-weight:700;font-size:13px}.password-form input,.auth-dialog input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid #d9e0e8;border-radius:12px;background:#fff;color:#152033;outline:none}.password-form input:focus,.auth-dialog input:focus{border-color:#ff765d;box-shadow:0 0 0 4px rgba(255,118,93,.12)}.auth-dialog{width:min(92vw,480px);border:0;border-radius:20px;padding:0;box-shadow:0 24px 80px rgba(10,22,38,.25)}.auth-dialog::backdrop{background:rgba(5,14,27,.58);backdrop-filter:blur(5px)}.auth-dialog form{padding:26px;display:grid;gap:12px}.auth-dialog .muted{margin-top:-4px;line-height:1.5}@media(max-width:800px){.account-grid{grid-template-columns:1fr}}

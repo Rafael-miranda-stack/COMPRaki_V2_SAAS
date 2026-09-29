@@ -5,3 +5,13 @@ CREATE TABLE IF NOT EXISTS project_members(project_id INTEGER REFERENCES project
 CREATE TABLE IF NOT EXISTS items(id SERIAL PRIMARY KEY,project_id INTEGER REFERENCES projects(id) ON DELETE CASCADE,name VARCHAR(220) NOT NULL,description TEXT,quantity INTEGER DEFAULT 1 CHECK(quantity>0),planned_price NUMERIC(12,2) DEFAULT 0,found_price NUMERIC(12,2) DEFAULT 0,paid_price NUMERIC(12,2) DEFAULT 0,status VARCHAR(30) DEFAULT 'A_ESCOLHER',store VARCHAR(150),product_url TEXT,image_url TEXT,purchased_at DATE,payment_status VARCHAR(30) DEFAULT 'NAO_SE_APLICA',payment_method VARCHAR(40),installments INTEGER DEFAULT 1,notes TEXT,created_at TIMESTAMP DEFAULT NOW(),updated_at TIMESTAMP DEFAULT NOW());
 CREATE TABLE IF NOT EXISTS price_history(id SERIAL PRIMARY KEY,item_id INTEGER REFERENCES items(id) ON DELETE CASCADE,price NUMERIC(12,2) NOT NULL,captured_at TIMESTAMP DEFAULT NOW());
 CREATE INDEX IF NOT EXISTS idx_items_project ON items(project_id);
+CREATE TABLE IF NOT EXISTS password_reset_tokens(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  token_hash VARCHAR(64) UNIQUE NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  used_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_password_reset_user ON password_reset_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_password_reset_hash ON password_reset_tokens(token_hash);
