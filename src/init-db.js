@@ -1,0 +1,1 @@
+require("dotenv").config();const fs=require("fs"),path=require("path"),db=require("./db");(async()=>{try{await db.query(fs.readFileSync(path.join(__dirname,"../sql/schema.sql"),"utf8"));console.log("Banco inicializado.");}catch(e){console.error(e)}finally{await db.end()}})();

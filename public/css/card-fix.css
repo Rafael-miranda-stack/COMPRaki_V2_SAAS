@@ -1,0 +1,135 @@
+
+/* COMPRAKI V2.2.1 — correção definitiva dos cards de produto */
+
+/* Neutraliza regras antigas que faziam a imagem/card se sobreporem */
+.items-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:18px;
+  align-items:start;
+}
+
+.product-card{
+  display:flex !important;
+  flex-direction:column !important;
+  position:relative !important;
+  height:auto !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  background:#fff !important;
+  border:1px solid #e6e9ef !important;
+  border-radius:18px !important;
+}
+
+.product-img{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  position:relative !important;
+  width:100% !important;
+  height:220px !important;
+  min-height:220px !important;
+  max-height:220px !important;
+  padding:14px !important;
+  overflow:hidden !important;
+  background:#f3f5f8 !important;
+}
+
+.product-img img{
+  position:static !important;
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  border-radius:10px !important;
+}
+
+.product-body{
+  position:relative !important;
+  z-index:2 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  flex:1 !important;
+  width:100% !important;
+  min-height:220px !important;
+  padding:18px !important;
+  background:#fff !important;
+  color:#172033 !important;
+}
+
+.product-body .tag{
+  align-self:flex-start;
+}
+
+.product-body h3{
+  margin:11px 0 7px !important;
+  min-height:0 !important;
+  font-size:16px !important;
+  line-height:1.4 !important;
+  color:#172033 !important;
+}
+
+.product-store{
+  margin-bottom:12px !important;
+  color:#7b8496 !important;
+  font-size:12px !important;
+}
+
+.product-price{
+  margin-top:auto !important;
+  color:#172033 !important;
+  font-size:23px !important;
+  font-weight:850 !important;
+}
+
+.product-actions{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:8px !important;
+  margin-top:16px !important;
+}
+
+.product-actions a,
+.product-actions button{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:39px !important;
+  padding:9px 12px !important;
+  border-radius:10px !important;
+  font-size:12px !important;
+  font-weight:750 !important;
+}
+
+.shop-link{
+  background:#111827 !important;
+  color:#fff !important;
+}
+
+.edit-placeholder{
+  background:#eef0f5 !important;
+  color:#485266 !important;
+}
+
+/* Uma única mercadoria não deve virar um banner gigante */
+.items-grid > .product-card:only-child{
+  max-width:390px !important;
+}
+
+@media(max-width:520px){
+  .items-grid{
+    grid-template-columns:1fr !important;
+  }
+  .items-grid > .product-card:only-child{
+    max-width:none !important;
+  }
+  .product-img{
+    height:200px !important;
+    min-height:200px !important;
+    max-height:200px !important;
+  }
+}

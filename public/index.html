@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="CompraKi">
+  <title>CompraKi</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="stylesheet" href="/css/app.css?v=240">
+  <link rel="stylesheet" href="/css/card-fix.css?v=230">
+</head>
+<body>
+<div id="toast"></div>
+
+<section id="auth" class="auth-page">
+  <div class="brand-panel">
+    <div class="auth-brand-copy">
+      <span class="auth-kicker">PLANEJE • ACOMPANHE • CONQUISTE</span>
+      <h1>Compra<span>Ki</span></h1>
+      <h2>Todas as suas compras em um só lugar.</h2>
+      <p>Organize projetos, acompanhe preços, compartilhe planos e mantenha cada compra dentro do orçamento.</p>
+      <div class="auth-benefits">
+        <span>✓ Projetos organizados</span><span>✓ Acompanhamento de preços</span><span>✓ Compartilhamento</span>
+      </div>
+    </div>
+  </div>
+  <div class="auth-side">
+    <div class="auth-box">
+      <div class="auth-mini-brand"><span class="logo small">C</span><b>CompraKi</b></div>
+      <span class="eyebrow" id="authEyebrow">ACESSO À CONTA</span>
+      <h2 id="authTitle">Bem-vindo de volta!</h2>
+      <p id="authSubtitle">Entre para continuar organizando seus projetos.</p>
+      <div id="nameField" class="auth-field" hidden>
+        <label for="name">Seu nome</label><input id="name" type="text" autocomplete="name" placeholder="Como podemos chamar você?">
+      </div>
+      <div class="auth-field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="email" placeholder="voce@email.com"></div>
+      <div class="auth-field"><label for="password">Senha</label><div class="password-wrap"><input id="password" type="password" autocomplete="current-password" placeholder="Digite sua senha"><button id="togglePassword" class="password-toggle" type="button" aria-label="Mostrar senha" title="Mostrar senha">◉</button></div></div>
+      <button id="loginBtn" class="auth-primary">Entrar</button>
+      <button id="registerSubmitBtn" class="auth-primary" hidden>Criar minha conta</button>
+      <div class="auth-switch"><span id="authSwitchText">Ainda não tem uma conta?</span><button id="registerBtn" type="button">Criar conta</button><button id="backToLoginBtn" type="button" hidden>Voltar para entrar</button></div>
+      <small class="auth-security">🔒 Seus dados de acesso são protegidos.</small>
+    </div>
+  </div>
+</section>
+
+<div id="shell" hidden>
+<aside>
+  <div class="side-brand"><div class="logo small">C</div><b>CompraKi</b></div>
+  <nav>
+    <button class="nav active" data-view="home">⌂ <span>Visão geral</span></button>
+    <button class="nav" data-view="projects">▦ <span>Meus projetos</span></button>
+    <button class="nav" data-view="shared">♧ <span>Compartilhados</span><i id="sharedBadge" class="nav-badge" hidden>0</i></button>
+    <button class="nav" data-view="purchases">✓ <span>Compras</span></button>
+    <button class="nav" data-view="alerts">⌁ <span>Alertas de preço</span></button>
+    <button class="nav" data-view="account">◉ <span>Minha conta</span></button>
+  </nav>
+  <div class="side-bottom">
+    <button id="installBtn" class="nav install-btn">⇩ <span>Instalar CompraKi</span></button>
+    <button id="logoutBtn" class="nav">↪ <span>Sair</span></button>
+  </div>
+</aside>
+
+<div class="workspace">
+<header>
+  <div><span class="eyebrow">PLANEJAMENTO DE COMPRAS</span><h1 id="pageTitle">Visão geral</h1></div>
+  <div class="user-chip"><span id="avatar">U</span><div><b id="userName">Usuário</b><small>Minha conta</small></div></div>
+</header>
+<main>
+<section id="homeView">
+  <div class="welcome"><div><span class="eyebrow">SEU PAINEL</span><h2>Transforme planos em compras organizadas.</h2><p>Orçamento, produtos, compras e projetos compartilhados em um só lugar.</p></div><button class="primary new-project">+ Novo projeto</button></div>
+  <div id="globalStats" class="stats"></div>
+  <div class="section-head"><div><h2>Projetos recentes</h2><p>Continue de onde parou.</p></div><button class="link" data-go="projects">Ver todos →</button></div>
+  <div id="recentProjects" class="project-grid"></div>
+</section>
+
+<section id="projectsView" hidden>
+  <div class="section-head"><div><h2>Meus projetos</h2><p>Projetos criados por você.</p></div><button class="primary new-project">+ Novo projeto</button></div>
+  <div id="allProjects" class="project-grid"></div>
+</section>
+
+<section id="sharedView" hidden>
+  <div class="section-head"><div><h2>Compartilhados comigo</h2><p>Projetos que outras pessoas liberaram para sua conta.</p></div></div>
+  <div id="sharedProjects" class="project-grid"></div>
+</section>
+
+<section id="purchasesView" hidden>
+  <div class="section-head"><div><h2>Compras</h2><p>Visão consolidada dos itens já comprados.</p></div></div>
+  <div id="purchasesGrid" class="items-grid"></div>
+</section>
+
+<section id="alertsView" hidden>
+  <div class="section-head"><div><h2>Alertas de preço</h2><p>Área preparada para histórico e alertas automáticos.</p></div></div>
+  <div class="feature-grid">
+    <div class="feature-card"><b>Histórico de preços</b><p>O CompraKi já registra alterações de preço encontradas nos itens.</p></div>
+    <div class="feature-card"><b>Alertas automáticos</b><p>Próxima etapa: avisar quando o produto atingir o preço desejado.</p></div>
+  </div>
+</section>
+
+<section id="projectView" hidden>
+  <button id="backBtn" class="back">← Voltar aos projetos</button>
+  <div class="project-hero">
+    <div><span id="projectTemplate" class="pill"></span><h2 id="projectName"></h2><div id="projectAccess" class="project-access"></div></div>
+    <div class="project-actions">
+      <button id="membersBtn" class="secondary-btn">👥 Participantes</button>
+      <button id="deleteProjectBtn" class="danger-outline">Excluir projeto</button>
+      <button id="newItemBtn" class="primary">+ Adicionar produto</button>
+    </div>
+  </div>
+  <div id="readonlyNote" class="readonly-note" hidden>Você possui acesso somente para visualização neste projeto.</div>
+  <div id="projectStats" class="stats"></div>
+  <div class="toolbar"><label class="search">⌕ <input id="itemSearch" placeholder="Buscar produto ou loja"></label><select id="statusFilter"><option value="">Todos os status</option><option value="A_ESCOLHER">A escolher</option><option value="ESCOLHIDO">Escolhido</option><option value="COMPRADO">Comprado</option><option value="CANCELADO">Cancelado</option></select></div>
+  <div id="itemsGrid" class="items-grid"></div>
+</section>
+
+<section id="accountView" hidden>
+  <div class="account-card"><h2>Minha conta</h2><p class="muted">Sua conta identifica suas permissões nos projetos.</p><div class="plan-line"><b>CompraKi</b><span>PWA habilitada</span></div></div>
+</section>
+</main>
+</div>
+</div>
+
+<dialog id="projectDlg"><form id="projectForm"><div class="dialog-head"><div><span class="eyebrow">NOVO PROJETO</span><h2>O que você está planejando?</h2></div><button type="button" class="x close-project">×</button></div>
+<label>Nome do projeto</label><input id="pname" required placeholder="Ex.: Casa nova">
+<label>Modelo</label><select id="ptemplate"><option>Casa nova</option><option>Enxoval</option><option>Viagem</option><option>Casamento</option><option>Setup Gamer</option><option>Escritório</option><option>Festa</option><option>Carro</option><option>Personalizado</option></select>
+<label>Orçamento</label><div class="money-input"><span>R$</span><input id="pbudget" type="number" min="0" step=".01"></div>
+<button class="primary full">Criar projeto</button></form></dialog>
+
+<dialog id="itemDlg"><form id="itemForm">
+<input id="itemProjectId" type="hidden"><input id="editItemId" type="hidden">
+<div class="dialog-head"><div><span id="itemDialogEyebrow" class="eyebrow">NOVO PRODUTO</span><h2 id="itemDialogTitle">Adicionar ao projeto</h2></div><button type="button" class="x close-item">×</button></div>
+<label>Link do produto</label><div class="import-row"><input id="url" type="url" placeholder="https://..."><button id="importBtn" type="button">Ler URL</button></div><div id="importStatus"></div><div id="preview"></div>
+<label>Produto</label><input id="iname" required>
+<label>Descrição</label><textarea id="idesc"></textarea>
+<div class="two"><div><label>Quantidade</label><input id="iqty" type="number" min="1" value="1"></div><div><label>Preço planejado</label><input id="iplanned" type="number" min="0" step=".01"></div></div>
+<div class="two"><div><label>Preço encontrado</label><input id="ifound" type="number" min="0" step=".01"></div><div><label>Loja</label><input id="istore"></div></div>
+<label>Status</label><select id="istatus"><option value="A_ESCOLHER">A escolher</option><option value="ESCOLHIDO">Escolhido</option><option value="COMPRADO">Comprado</option><option value="CANCELADO">Cancelado</option></select>
+<div id="purchaseFields" hidden><div class="two"><div><label>Preço pago</label><input id="ipaid" type="number" min="0" step=".01"></div><div><label>Data da compra</label><input id="idate" type="date"></div></div><div class="two"><div><label>Pagamento</label><select id="ipay"><option value="">Selecione</option><option>Pix</option><option>Cartão de crédito</option><option>Cartão de débito</option><option>Boleto</option><option>Dinheiro</option></select></div><div><label>Parcelas</label><input id="iinstallments" type="number" min="1" value="1"></div></div></div>
+<div class="product-actions"><button id="deleteItemBtn" type="button" class="danger-btn" hidden>Excluir produto</button><button class="primary" type="submit">Salvar produto</button></div>
+</form></dialog>
+
+<dialog id="membersDlg"><form onsubmit="return false"><div class="dialog-head"><div><span class="eyebrow">COMPARTILHAMENTO</span><h2>Participantes do projeto</h2></div><button type="button" class="x close-members">×</button></div>
+<div id="memberInvite"><label>E-mail do usuário</label><div class="import-row"><input id="memberEmail" type="email" placeholder="usuario@email.com"><select id="memberRole"><option value="VIEWER">Visualizador</option><option value="EDITOR">Editor</option></select></div><button id="addMemberBtn" type="button" class="primary full">Adicionar / atualizar acesso</button></div>
+<div id="memberList" class="member-list"></div></form></dialog>
+
+<dialog id="confirmDlg" class="confirm-dialog"><div class="confirm-box"><div class="danger-icon">!</div><h2>Excluir projeto?</h2><p id="confirmText"></p><div class="confirm-actions"><button id="cancelDeleteBtn" class="secondary-btn">Cancelar</button><button id="confirmDeleteBtn" class="danger-btn">Excluir definitivamente</button></div></div></dialog>
+
+<script src="/js/app.js?v=240"></script>
+</body></html>

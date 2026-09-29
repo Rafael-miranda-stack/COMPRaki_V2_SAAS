@@ -1,0 +1,71 @@
+CREATE TABLE IF NOT EXISTS users(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(180) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS subscriptions(
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  plan VARCHAR(30) DEFAULT 'TRIAL',
+  status VARCHAR(30) DEFAULT 'TRIAL',
+  trial_ends_at TIMESTAMP DEFAULT(NOW()+INTERVAL '14 days'),
+  current_period_end TIMESTAMP,
+  provider VARCHAR(40),
+  provider_customer_id TEXT
+);
+
+CREATE TABLE IF NOT EXISTS projects(
+  id SERIAL PRIMARY KEY,
+  owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  name VARCHAR(140) NOT NULL,
+  template VARCHAR(60) DEFAULT 'Personalizado',
+  budget NUMERIC(12,2) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS project_members(
+  project_id INTEGER REFERENCES projects(id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  role VARCHAR(30) DEFAULT 'VIEWER',
+  PRIMARY KEY(project_id,user_id)
+);
+
+CREATE TABLE IF NOT EXISTS items(
+  id SERIAL PRIMARY KEY,
+  project_id INTEGER REFERENCES projects(id) ON DELETE CASCADE,
+  name VARCHAR(220) NOT NULL,
+  description TEXT,
+  quantity INTEGER DEFAULT 1 CHECK(quantity>0),
+  planned_price NUMERIC(12,2) DEFAULT 0,
+  found_price NUMERIC(12,2) DEFAULT 0,
+  paid_price NUMERIC(12,2) DEFAULT 0,
+  status VARCHAR(30) DEFAULT 'A_ESCOLHER',
+  store VARCHAR(150),
+  product_url TEXT,
+  image_url TEXT,
+  purchased_at DATE,
+  payment_status VARCHAR(30) DEFAULT 'NAO_SE_APLICA',
+  payment_method VARCHAR(40),
+  installments INTEGER DEFAULT 1,
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS price_history(
+  id SERIAL PRIMARY KEY,
+  item_id INTEGER REFERENCES items(id) ON DELETE CASCADE,
+  price NUMERIC(12,2) NOT NULL,
+  captured_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Migrações idempotentes para bancos já existentes
+ALTER TABLE project_members ALTER COLUMN role SET DEFAULT 'VIEWER';
+UPDATE project_members SET role='EDITOR' WHERE role IS NULL OR role NOT IN ('OWNER','EDITOR','VIEWER');
+
+CREATE INDEX IF NOT EXISTS idx_items_project ON items(project_id);
+CREATE INDEX IF NOT EXISTS idx_project_members_user ON project_members(user_id);
+CREATE INDEX IF NOT EXISTS idx_projects_owner ON projects(owner_id);
