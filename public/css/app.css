@@ -169,3 +169,407 @@ body:has(.auth-page:not([hidden])) {
 .auth-brand-copy{position:relative;z-index:2;max-width:650px}.auth-kicker{font-size:11px;letter-spacing:.22em;font-weight:800;color:#ef9a7d}.auth-brand-copy h1{font-size:clamp(38px,4vw,62px);margin:10px 0 18px;letter-spacing:-.04em}.auth-brand-copy h1 span{color:#e98263}.auth-brand-copy h2{font-size:clamp(28px,3vw,48px);line-height:1.05;margin:0 0 16px;max-width:570px}.auth-brand-copy p{max-width:570px;margin:0;color:rgba(255,255,255,.82);font-size:16px;line-height:1.6}.auth-benefits{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.auth-benefits span{padding:8px 11px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.09);backdrop-filter:blur(10px);border-radius:999px;font-size:12px;font-weight:700}
 .auth-side{display:grid;place-items:center;padding:38px;background:radial-gradient(circle at top right,#fff2eb 0,transparent 35%),#f7f8fb}.auth-box{width:min(440px,100%);margin:0;padding:38px;background:rgba(255,255,255,.96);border:1px solid #e8e9ed;border-radius:26px;box-shadow:0 28px 70px rgba(15,23,42,.12)}.auth-mini-brand{display:flex;align-items:center;gap:10px;margin-bottom:28px;font-size:21px}.auth-mini-brand .logo{margin:0}.auth-box h2{margin:6px 0 6px;font-size:30px;letter-spacing:-.03em}.auth-box>p{margin:0 0 24px;color:#7b8496;line-height:1.5}.auth-field{margin-top:14px}.auth-field label{display:block;margin:0 0 7px;color:#566074;font-size:12px;font-weight:800}.auth-field input{width:100%;height:50px;border:1px solid #dfe3ea;border-radius:13px;padding:0 15px;background:#fff;outline:none;transition:.2s}.auth-field input:focus{border-color:#e98263;box-shadow:0 0 0 4px rgba(233,130,99,.11)}.password-wrap{position:relative}.password-wrap input{padding-right:52px}.password-toggle{position:absolute;right:7px;top:7px;width:36px;height:36px;border:0;border-radius:9px;background:#f3f4f6;color:#657084;font-size:16px}.password-toggle:hover{background:#e9ecf1}.auth-primary{width:100%;height:50px;margin-top:22px;border:0;border-radius:13px;background:#101827;color:#fff;font-weight:850;box-shadow:0 10px 22px rgba(16,24,39,.14)}.auth-primary:hover{transform:translateY(-1px);background:#182338}.auth-switch{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:18px;color:#7b8496;font-size:13px}.auth-switch button{border:0;background:transparent;color:#d96f51;font-weight:850;padding:3px}.auth-security{display:block;text-align:center;margin-top:22px;color:#9aa1ae}.auth-page[hidden],#shell[hidden],[hidden]{display:none!important}
 @media(max-width:920px){.auth-page{grid-template-columns:1fr}.brand-panel{position:absolute;inset:0;padding:28px;background-position:58% center}.brand-panel:before{content:"";position:absolute;inset:0;background:rgba(7,16,29,.58)}.auth-brand-copy{display:none}.auth-side{position:relative;z-index:3;background:transparent;padding:20px}.auth-box{padding:30px 24px;box-shadow:0 28px 80px rgba(0,0,0,.28)}}
+
+
+/* ==========================================================================
+   CompraKi V2.5 — Login full-screen + glassmorphism
+   ========================================================================== */
+
+#authScreen.auth-screen {
+  position: fixed;
+  inset: 0;
+  min-height: 100vh;
+  width: 100%;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(390px, 520px);
+  align-items: stretch;
+  background:
+    linear-gradient(90deg,
+      rgba(7, 17, 31, .68) 0%,
+      rgba(7, 17, 31, .42) 42%,
+      rgba(7, 17, 31, .20) 62%,
+      rgba(7, 17, 31, .38) 100%),
+    url("/images/login-hero.png") center center / cover no-repeat;
+}
+
+#authScreen .auth-brand {
+  min-width: 0;
+  min-height: 100vh;
+  background: transparent !important;
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(36px, 6vw, 88px);
+  position: relative;
+}
+
+#authScreen .auth-brand::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    rgba(5, 15, 28, .18) 0%,
+    rgba(5, 15, 28, .03) 70%,
+    rgba(5, 15, 28, 0) 100%);
+}
+
+#authScreen .auth-brand > * {
+  position: relative;
+  z-index: 1;
+}
+
+#authScreen .auth-panel {
+  min-height: 100vh;
+  width: 100%;
+  padding: 40px clamp(24px, 4vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(90deg,
+      rgba(8, 17, 31, .06) 0%,
+      rgba(8, 17, 31, .16) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+#authScreen .auth-card {
+  width: min(100%, 430px);
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: rgba(12, 22, 36, .56);
+  color: #fff;
+  border-radius: 28px;
+  padding: clamp(28px, 3vw, 40px);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, .28);
+  backdrop-filter: blur(20px) saturate(135%);
+  -webkit-backdrop-filter: blur(20px) saturate(135%);
+}
+
+#authScreen .auth-card h1,
+#authScreen .auth-card h2,
+#authScreen .auth-card strong,
+#authScreen .auth-card label {
+  color: #fff;
+}
+
+#authScreen .auth-card p,
+#authScreen .auth-card .muted,
+#authScreen .auth-card small {
+  color: rgba(255, 255, 255, .72);
+}
+
+#authScreen .auth-card input {
+  width: 100%;
+  min-height: 52px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  outline: none;
+  box-shadow: none;
+}
+
+#authScreen .auth-card input::placeholder {
+  color: rgba(255,255,255,.52);
+}
+
+#authScreen .auth-card input:focus {
+  border-color: rgba(255, 122, 92, .95);
+  box-shadow: 0 0 0 3px rgba(255, 122, 92, .14);
+}
+
+#authScreen .password-wrap,
+#authScreen .password-field,
+#authScreen .password-input-wrap {
+  position: relative;
+}
+
+#authScreen input[type="password"],
+#authScreen input[data-password-input],
+#authScreen #authPassword {
+  padding-right: 52px !important;
+}
+
+#authScreen .toggle-password,
+#authScreen #togglePassword,
+#authScreen [data-toggle-password] {
+  position: absolute !important;
+  top: 50% !important;
+  right: 14px !important;
+  left: auto !important;
+  transform: translateY(-50%) !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: rgba(255,255,255,.78) !important;
+  display: grid !important;
+  place-items: center !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  z-index: 3;
+}
+
+#authScreen .toggle-password:hover,
+#authScreen #togglePassword:hover,
+#authScreen [data-toggle-password]:hover {
+  background: rgba(255,255,255,.10) !important;
+  color: #fff !important;
+}
+
+#authScreen .auth-card .primary,
+#authScreen .auth-card button[type="submit"] {
+  min-height: 52px;
+  border-radius: 14px;
+}
+
+#authScreen .auth-card a,
+#authScreen .auth-card .link-btn {
+  color: #ff876d;
+}
+
+/* Após o login: mantém a identidade premium, mas com transparência sutil
+   para não prejudicar a leitura do dashboard. */
+#appShell,
+.app-shell {
+  background:
+    linear-gradient(rgba(244,247,251,.94), rgba(244,247,251,.94)),
+    url("/images/login-hero.png") center / cover fixed;
+}
+
+.sidebar {
+  background: rgba(10, 22, 38, .94) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+
+.topbar,
+.app-topbar {
+  background: rgba(255,255,255,.82) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(15,31,53,.08);
+}
+
+.card,
+.project-card,
+.stat-card,
+.panel {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@media (max-width: 900px) {
+  #authScreen.auth-screen {
+    grid-template-columns: 1fr;
+    background-position: 58% center;
+  }
+
+  #authScreen .auth-brand {
+    display: none;
+  }
+
+  #authScreen .auth-panel {
+    min-height: 100vh;
+    padding: 24px;
+    background: linear-gradient(rgba(7,17,31,.42), rgba(7,17,31,.52));
+  }
+
+  #authScreen .auth-card {
+    background: rgba(10,20,34,.68);
+  }
+}
+
+
+/* ==========================================================================
+   CompraKi V2.6 — correção REAL dos seletores da tela atual
+   A imagem ocupa a tela toda; o formulário fica em vidro transparente.
+   ========================================================================== */
+
+.auth-page {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  min-height: 100vh !important;
+  display: block !important;
+  overflow: auto !important;
+  background: #0b1422 !important;
+}
+
+/* Fundo em tela inteira */
+.brand-panel {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  padding: 0 !important;
+  background:
+    linear-gradient(90deg,
+      rgba(5, 14, 27, .24) 0%,
+      rgba(5, 14, 27, .10) 48%,
+      rgba(5, 14, 27, .20) 70%,
+      rgba(5, 14, 27, .42) 100%),
+    url("/images/login-hero.png") center center / cover no-repeat !important;
+  z-index: 0 !important;
+}
+
+/* A arte já possui a comunicação visual. Evita texto HTML duplicado sobre a imagem. */
+.auth-brand-copy {
+  display: none !important;
+}
+
+/* Remove a antiga metade branca */
+.auth-side {
+  position: relative !important;
+  z-index: 2 !important;
+  width: min(520px, 100%) !important;
+  min-height: 100vh !important;
+  margin-left: auto !important;
+  padding: 36px clamp(24px, 4vw, 56px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(90deg,
+    rgba(7, 16, 29, 0) 0%,
+    rgba(7, 16, 29, .10) 18%,
+    rgba(7, 16, 29, .28) 100%) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Card de login translúcido */
+.auth-box {
+  width: min(430px, 100%) !important;
+  margin: 0 !important;
+  padding: 36px !important;
+  border: 1px solid rgba(255, 255, 255, .24) !important;
+  border-radius: 26px !important;
+  background: rgba(9, 18, 31, .56) !important;
+  color: #fff !important;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, .30) !important;
+  backdrop-filter: blur(20px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(135%) !important;
+}
+
+.auth-mini-brand,
+.auth-box h2,
+.auth-box label {
+  color: #fff !important;
+}
+
+.auth-box > p,
+.auth-security,
+.auth-switch {
+  color: rgba(255,255,255,.72) !important;
+}
+
+.auth-field input {
+  height: 52px !important;
+  border: 1px solid rgba(255,255,255,.26) !important;
+  background: rgba(255,255,255,.11) !important;
+  color: #fff !important;
+  border-radius: 14px !important;
+}
+
+.auth-field input::placeholder {
+  color: rgba(255,255,255,.52) !important;
+}
+
+.auth-field input:focus {
+  border-color: rgba(255,132,103,.95) !important;
+  box-shadow: 0 0 0 4px rgba(255,132,103,.13) !important;
+}
+
+/* Senha: input normal + olho pequeno no canto direito */
+.password-wrap {
+  position: relative !important;
+  display: block !important;
+}
+
+.password-wrap input {
+  width: 100% !important;
+  padding-right: 54px !important;
+}
+
+.password-toggle {
+  position: absolute !important;
+  right: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  color: rgba(255,255,255,.82) !important;
+  box-shadow: none !important;
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+  z-index: 4 !important;
+}
+
+.password-toggle:hover {
+  background: rgba(255,255,255,.10) !important;
+  color: #fff !important;
+}
+
+.auth-primary {
+  background: #ff765d !important;
+  color: #fff !important;
+  box-shadow: 0 12px 28px rgba(255,118,93,.22) !important;
+}
+
+.auth-primary:hover {
+  background: #ff684d !important;
+}
+
+.auth-switch button {
+  color: #ff8a70 !important;
+}
+
+/* Pós-login: transparência discreta, sem prejudicar leitura */
+#shell {
+  background:
+    linear-gradient(rgba(244,247,251,.95), rgba(244,247,251,.95)),
+    url("/images/login-hero.png") center / cover fixed !important;
+}
+
+#shell .sidebar {
+  background: rgba(10, 22, 38, .94) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+#shell .topbar {
+  background: rgba(255,255,255,.84) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .brand-panel {
+    background-position: 62% center !important;
+  }
+
+  .auth-side {
+    width: 100% !important;
+    padding: 22px !important;
+    background: rgba(5,14,27,.28) !important;
+  }
+
+  .auth-box {
+    padding: 28px 24px !important;
+    background: rgba(9,18,31,.68) !important;
+  }
+}

@@ -1,0 +1,44 @@
+/* CompraKi — tema pós-login isolado
+   Este arquivo NÃO altera .auth-page, .brand-panel, .auth-side,
+   .auth-box, .password-wrap ou .password-toggle. */
+
+#shell {
+  background:
+    linear-gradient(
+      rgba(244, 247, 251, 0.45),
+      rgba(244, 247, 251, 0.55)
+    ),
+    url("/images/dashboard-hero.png") center center / cover fixed !important;
+}
+
+/* Área de conteúdo sem uma segunda camada opaca */
+#shell .workspace,
+#shell main {
+  background: transparent !important;
+}
+
+/* Cabeçalho pós-login */
+#shell .topbar {
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(15, 31, 53, 0.07);
+}
+
+/* Menu lateral */
+#shell .sidebar {
+  background: rgba(10, 22, 38, 0.93) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Cards continuam legíveis */
+#shell .stat-card,
+#shell .project-card,
+#shell .product-card,
+#shell .account-card,
+#shell .feature-card {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
